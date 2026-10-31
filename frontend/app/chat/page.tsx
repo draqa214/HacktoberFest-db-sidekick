@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
+import Brand from "@/components/Brand";
 import ChatWindow from "@/components/ChatWindow";
 import ApprovalCard from "@/components/ApprovalCard";
 import QueryStepBlock from "@/components/QueryStepBlock";
@@ -265,23 +267,27 @@ export default function ChatPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-gray-900">
-      {/* Header */}
-      <div className="flex shrink-0 items-center justify-between border-b border-gray-700 bg-gray-800 px-6 py-4 shadow-lg">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md">
-            <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-            </svg>
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-white">Database Sidekick</h1>
-            <p className="text-xs text-gray-400">
-              {runtime ? `${runtime.model} · ${runtime.provider}` : "Gemma runtime unavailable"}
-              {" · Writes require your approval"}
-            </p>
-          </div>
+    <div className="sidekick-workspace">
+      <aside className="workspace-sidebar">
+        <Brand />
+        <div className="workspace-label">WORKSPACE</div>
+        <nav aria-label="Workspace navigation">
+          <Link href="/chat" className="sidebar-link active" aria-current="page"><span aria-hidden="true">◫</span> Database chat <span className="sidebar-shortcut">AI</span></Link>
+          <Link href="/onboarding" className="sidebar-link"><span aria-hidden="true">▤</span> Connection settings <span aria-hidden="true">↗</span></Link>
+        </nav>
+        <div className="sidebar-session"><div className="workspace-label">THIS CONVERSATION</div>
+          <div><span>Messages</span><strong>{messages.filter((message) => message.role === "user").length}</strong></div>
+          <div><span>SQL steps</span><strong>{messages.reduce((count, message) => count + (message.steps?.length ?? 0), 0) + (inProgress?.accumulatedSteps.length ?? 0)}</strong></div>
+          <div><span>Approval</span><strong className={inProgress?.pendingApproval ? "text-amber-300" : "text-emerald-300"}>{inProgress?.pendingApproval ? "Pending" : "Up to date"}</strong></div>
         </div>
+        <div className="sidebar-bottom"><div className="sidebar-tip"><span>YOU'RE IN CONTROL</span><p>Read queries run automatically. Database changes wait for your approval.</p></div>
+          <div className="sidebar-model"><span className="status-dot"/><span>{runtime ? "Model configured" : "Checking runtime"}<small>{runtime?.model ?? "Waiting for backend"}</small></span></div>
+        </div>
+      </aside>
+    <main className="flex h-dvh min-h-0 min-w-0 flex-col overflow-hidden bg-gray-900">
+      {/* Header */}
+      <div className="workspace-topbar flex shrink-0 items-center justify-between gap-3 border-b border-gray-700 px-4 py-4 sm:px-8">
+        <div className="workspace-heading"><span className="eyebrow">YOUR WORKSPACE</span><h1>Database chat <Link href="/onboarding" className="ml-2 text-[10px] font-normal text-gray-400 md:hidden">Connection ↗</Link> <span className="workspace-pill">Sidekick</span></h1></div>
         <div className="flex items-center gap-2">
         <button disabled={busy} onClick={async () => {
           if (!await recoverPending(inProgress?.accumulatedSteps ?? [])) {
@@ -297,17 +303,25 @@ export default function ChatPage() {
       </div>
 
       {/* Finalised messages */}
-      <ChatWindow messages={messages} scrollTrigger={inProgress}>
+      <ChatWindow messages={messages.length === 1 ? [] : messages} scrollTrigger={inProgress}>
 
       {messages.length === 1 && !inProgress && (
-        <div className="mx-auto flex w-full max-w-3xl flex-wrap gap-2 px-4 pb-4">
-          {["Describe my tables and their relationships", "Check for missing values and summarize data quality", "Show me a useful summary of my data using aggregate queries"].map((prompt) => (
-            <button key={prompt} onClick={() => { setInput(prompt); textareaRef.current?.focus(); }}
-              className="rounded-xl border border-gray-700 px-3 py-2 text-left text-xs text-gray-300 hover:border-blue-500 hover:bg-gray-800">
-              {prompt}
-            </button>
-          ))}
-        </div>
+        <section className="chat-welcome">
+          <div className="welcome-symbol" aria-hidden="true">✳</div>
+          <span className="eyebrow">MEET YOUR DATABASE SIDEKICK</span>
+          <h2>What will you discover?</h2>
+          <p>Ask a question. Explore a relationship. Bring a diagram to life.<br className="hidden sm:block"/> Start with your curiosity. We'll handle the SQL.</p>
+          <div className="welcome-prompts">
+            {[
+              { icon: "▤", title: "Explore my database", description: "Understand your tables and relationships", prompt: "Describe my tables and their relationships" },
+              { icon: "◈", title: "Find the story in my data", description: "Turn rows into useful insights", prompt: "Show me a useful summary of my data using aggregate queries" },
+              { icon: "⌘", title: "Bring a diagram to life", description: "Attach an ER diagram to get started", prompt: "Help me implement an ER diagram. I will attach the image; ask about any unclear details first." },
+            ].map((item) => <button key={item.title} disabled={inputBlocked} onClick={() => { setInput(item.prompt); textareaRef.current?.focus(); }} className="welcome-prompt">
+              <span className="prompt-icon" aria-hidden="true">{item.icon}</span><strong>{item.title}</strong><span>{item.description}</span><b aria-hidden="true">↗</b>
+            </button>)}
+          </div>
+          <div className="welcome-assurance"><span className="status-dot"/> Your next database change starts with your approval.</div>
+        </section>
       )}
 
       {/* In-progress block — shown while a response is being built */}
@@ -347,7 +361,7 @@ export default function ChatPage() {
       </ChatWindow>
 
       {/* Input bar — disabled while waiting for LLM or user approval */}
-      <div className="shrink-0 border-t border-gray-700 bg-gray-800 px-4 py-4 shadow-lg">
+      <div className="composer-dock shrink-0 px-4 pb-4 pt-2 sm:px-8 sm:pb-6">
         <div className="mx-auto max-w-3xl">
           {attachmentError && <p role="alert" className="mb-2 text-sm text-red-300">{attachmentError}</p>}
           {images.length > 0 && <div className="mb-3 flex flex-wrap gap-3">
@@ -358,9 +372,9 @@ export default function ChatPage() {
               <p className="truncate text-xs text-gray-400">{image.name}</p>
             </div>)}
           </div>}
-          <p className="mb-2 text-xs text-gray-400">Attach diagrams, screenshots, or photos · Up to 3 images, 4 MB each · Images are sent to Google with your message</p>
+          <p className="composer-hint mb-2 text-xs text-gray-400">PNG, JPEG, WebP · 3 images, 4 MB each · Images sent to Google</p>
         </div>
-        <div className="mx-auto flex max-w-3xl items-end gap-3">
+        <div className="composer-box mx-auto flex max-w-3xl items-end gap-2">
           <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" multiple className="hidden" aria-label="Attach images" onChange={(event) => attachImages(event.target.files)} />
           <button type="button" disabled={inputBlocked || images.length >= 3 || runtime?.provider !== "gemini"} onClick={() => fileInputRef.current?.click()}
             className="rounded-xl border border-gray-600 px-3 py-3 text-sm text-gray-200 hover:bg-gray-700 disabled:opacity-50" title="Attach ER diagrams or other images">
@@ -368,6 +382,7 @@ export default function ChatPage() {
           </button>
           <textarea
             ref={textareaRef}
+            aria-label="Message your database sidekick"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -377,14 +392,14 @@ export default function ChatPage() {
             placeholder={
               inProgress?.pendingApproval
                 ? "Waiting for your decision above…"
-                : "Ask anything about your database… (Enter to send)"
+                : "Ask your database anything…"
             }
             style={{ maxHeight: "120px", overflowY: "auto" }}
           />
           <button
             onClick={handleSend}
             disabled={inputBlocked || (!input.trim() && images.length === 0)}
-            className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="sidekick-primary rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {sending && !inProgress?.pendingApproval ? (
               <span className="flex items-center gap-2">
@@ -402,6 +417,7 @@ export default function ChatPage() {
           </button>
         </div>
       </div>
+    </main>
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
   if (isUser) {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[75%] rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm text-white shadow-lg">
+        <div className="user-message max-w-[85%] rounded-2xl px-5 py-3 text-sm text-white">
           {message.images && message.images.length > 0 && <div className="mb-3 flex flex-wrap gap-2">
             {message.images.map((image, index) => <a key={index} href={`data:${image.mime_type};base64,${image.data}`} target="_blank" rel="noreferrer" aria-label={`Open ${image.name}`}>
               <img src={`data:${image.mime_type};base64,${image.data}`} alt={image.name} className="max-h-40 max-w-full rounded-lg bg-gray-900 object-contain" />
@@ -47,7 +47,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         )}
 
         {/* Final answer */}
-        <div className="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-4 text-sm text-gray-200 shadow-lg">
+        <div className="assistant-message rounded-2xl px-1 py-3 text-sm text-gray-200">
           <MarkdownMessage content={message.content} />
         </div>
 

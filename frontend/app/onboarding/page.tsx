@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import AuthAside from "@/components/AuthAside";
 import { supabase } from "@/lib/supabaseClient";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api/backend";
@@ -63,11 +64,12 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="bg-gray-900 flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-lg space-y-8">
+    <div className="sidekick-auth">
+      <AuthAside />
+      <div className="auth-form w-full max-w-lg space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
+          <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-2xl sidekick-logo-tile">
             <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
@@ -81,7 +83,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-gray-700 bg-gray-800 p-8 shadow-xl">
+        <div className="auth-card rounded-2xl border border-gray-700 bg-gray-800 p-8">
 
           {error && (
             <div className="mb-6 rounded-lg border border-red-800 bg-red-900/50 px-4 py-3 text-sm text-red-200">
@@ -96,11 +98,14 @@ export default function OnboardingPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label htmlFor="database-url" className="mb-2 block text-sm font-medium text-gray-300">
                 Connection String
               </label>
               <input
-                type="text"
+                id="database-url"
+                autoComplete="off"
+                spellCheck={false}
+                type="password"
                 value={connectionString}
                 onChange={(e) => setConnectionString(e.target.value)}
                 disabled={loading}
@@ -118,7 +123,7 @@ export default function OnboardingPage() {
             <button
               onClick={handleConnect}
               disabled={loading || !connectionString.trim()}
-              className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="sidekick-primary w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

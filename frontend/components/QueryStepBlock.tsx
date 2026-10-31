@@ -39,10 +39,11 @@ export default function QueryStepBlock({ step, index }: QueryStepBlockProps) {
     : "text-green-600";
 
   return (
-    <div className={`rounded-xl border bg-gray-800 text-xs shadow-lg transition-all ${isRejected ? "border-gray-700 opacity-60" : "border-gray-700 hover:shadow-xl"}`}>
+    <div className={`sql-step rounded-xl border bg-gray-800 text-xs transition-all ${isRejected ? "border-gray-700 opacity-60" : "border-gray-700 hover:border-gray-600"}`}>
       {/* Header row */}
       <button
         onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-700"
       >
         <div className="flex items-center gap-2 min-w-0">

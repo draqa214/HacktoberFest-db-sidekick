@@ -29,7 +29,7 @@ export default function ApprovalCard({
   };
 
   return (
-    <div className="min-w-0 rounded-xl border-2 border-yellow-600 bg-gray-800 p-4 shadow-lg sm:p-5">
+    <div className="approval-panel min-w-0 rounded-xl border border-yellow-600 bg-gray-800 p-4 sm:p-5">
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500 shadow-md">
@@ -60,7 +60,7 @@ export default function ApprovalCard({
         <button
           onClick={handleApprove}
           disabled={deciding}
-          className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-md transition-all hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="sidekick-primary flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-md transition-all hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {deciding && isApproving ? (
             <span className="flex items-center justify-center gap-2">
