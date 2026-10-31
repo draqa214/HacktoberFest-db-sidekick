@@ -75,3 +75,9 @@ Try: "Implement this ER diagram. Inspect my schema, explain unclear details, and
 Gemma can create new tables in the default/public schema, one approved statement at a time. The schema cache refreshes after approved table creation. Existing table modifications (ALTER), DROP/DELETE, views/functions/triggers, CREATE OR REPLACE, and CREATE TABLE AS SELECT remain blocked. These approvals are independent commits, not one atomic migration; if a later table fails, earlier approved tables remain. Database credentials must have CREATE privilege for table creation to succeed. New Supabase tables do not get automatic application-specific RLS policies from this feature; review access policies before using them with the Data API.
 
 Image-only messages default to analysis and suggestions; include an explicit implementation request to propose changes. Unclear diagrams should lead to clarification, not invented columns. Model interpretation must still be reviewed. Current automated tests cover image formatting/validation and approved DDL with mocked responses, not live visual recognition quality.
+
+## Voice dictation
+
+Click **Speak**, grant microphone permission, and dictate in English. Click **Stop** (or wait up to 60 seconds), review/edit the transcribed text, then click **Send**. Nothing is submitted automatically. Existing SQL approval rules apply. The microphone is stopped when the component unmounts or chat becomes busy.
+
+This uses the browser Web Speech API, not Gemma audio input. Browser support varies; try Chrome or Edge on localhost or HTTPS. Unsupported browsers disable the button with an explanatory tooltip. Your browser may send audio to its speech-recognition provider; our backend receives only the submitted text. No additional API key is needed. Live microphone accuracy/permissions still require manual testing on the user's browser. Audio-file uploads and spoken responses are not included.

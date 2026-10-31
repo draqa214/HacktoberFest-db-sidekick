@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Brand from "@/components/Brand";
+import VoiceInput from "@/components/VoiceInput";
 import ChatWindow from "@/components/ChatWindow";
 import ApprovalCard from "@/components/ApprovalCard";
 import QueryStepBlock from "@/components/QueryStepBlock";
@@ -65,6 +66,7 @@ export default function ChatPage() {
   const [images, setImages] = useState<ImageAttachment[]>([]);
   const [attachmentError, setAttachmentError] = useState("");
   const [readingImages, setReadingImages] = useState(false);
+  const [listening, setListening] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [sending, setSending] = useState(false);
   const [recovering, setRecovering] = useState(false);
@@ -75,7 +77,7 @@ export default function ChatPage() {
   // Derived: true when the UI is busy (waiting for LLM or for execute round-trip)
   const busy = sending || recovering || (inProgress?.deciding ?? false);
   // Derived: true when input should be blocked (either busy or waiting for user approval)
-  const inputBlocked = busy || readingImages || inProgress?.pendingApproval != null;
+  const inputBlocked = busy || readingImages || listening || inProgress?.pendingApproval != null;
 
   async function recoverPending(previousSteps: QueryStep[] = []): Promise<boolean> {
     setRecovering(true);
@@ -372,7 +374,7 @@ export default function ChatPage() {
               <p className="truncate text-xs text-gray-400">{image.name}</p>
             </div>)}
           </div>}
-          <p className="composer-hint mb-2 text-xs text-gray-400">PNG, JPEG, WebP · 3 images, 4 MB each · Images sent to Google</p>
+          <p className="composer-hint mb-2 text-xs text-gray-400">Images sent to Google · Voice uses your browser's speech service · Review before sending</p>
         </div>
         <div className="composer-box mx-auto flex max-w-3xl items-end gap-2">
           <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" multiple className="hidden" aria-label="Attach images" onChange={(event) => attachImages(event.target.files)} />
@@ -380,6 +382,9 @@ export default function ChatPage() {
             className="rounded-xl border border-gray-600 px-3 py-3 text-sm text-gray-200 hover:bg-gray-700 disabled:opacity-50" title="Attach ER diagrams or other images">
             {readingImages ? "Reading…" : "+ Image"}
           </button>
+          <VoiceInput disabled={busy || readingImages || inProgress?.pendingApproval != null}
+            onActiveChange={setListening}
+            onTranscript={(text) => setInput((current) => [current.trimEnd(), text].filter(Boolean).join(" "))} />
           <textarea
             ref={textareaRef}
             aria-label="Message your database sidekick"

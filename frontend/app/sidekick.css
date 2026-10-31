@@ -111,3 +111,10 @@ button:focus-visible, a:focus-visible { outline: 2px solid #72dec0; outline-offs
 }
 @media (max-width: 430px) { .welcome-prompts { grid-template-columns: 1fr; } .welcome-prompt { display: grid; grid-template-columns: 28px 1fr; gap: 4px 9px; text-align: left; } .prompt-icon { grid-row: span 2; margin: 0; } .welcome-prompt strong { margin: 0; } .welcome-prompt > span:not(.prompt-icon) { grid-column: 2; } .welcome-prompt b { display: none; } .welcome-symbol { width: 60px; height: 60px; font-size: 36px; margin-bottom: 20px; } .welcome-assurance { font-size: 9px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+.voice-control { position: relative; flex-shrink: 0; }
+.voice-button { display: flex; align-items: center; gap: 6px; padding: 11px 8px; color: #b1c7b8; font-size: 11px; border-radius: 9px; }
+.voice-button:hover:not(:disabled) { background: #2b3d31; }
+.voice-button:disabled { opacity: .4; cursor: not-allowed; }
+.voice-active { background: #51302f; color: #ffc1b9; box-shadow: inset 0 0 0 1px #84504a; }
+.voice-status { position: absolute; bottom: calc(100% + 15px); left: 0; width: min(310px,65vw); padding: 10px 13px; border: 1px solid #486052; border-radius: 10px; background: #223329; color: #dcf0e2; font-size: 11px; line-height: 1.6; box-shadow: 0 8px 25px #0004; z-index: 5; }
+@media (max-width: 480px) { .voice-button span { display: none; } .voice-button { padding: 11px 5px; } .composer-box { gap: 4px; } }
