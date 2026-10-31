@@ -1,0 +1,32 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.db
+*.tsbuildinfo
+
+# Local screenshots may contain database contents and business information.
+/demo/
+
+# Credentials, local exports, database files and diagnostics.
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+credentials.json
+service-account*.json
+*.sqlite
+*.sqlite3
+*.db-*
+*.dump
+*.backup
+*.bak
+*.log
+logs/
+.vercel/

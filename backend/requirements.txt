@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+httpx
+sqlalchemy
+psycopg2-binary
+psycopg[binary]>=3.2,<4
+python-dotenv
+supabase
+pydantic
+PyMySQL
+python-jose
+slowapi
+sqlglot>=27,<29
+google-genai>=1.0,<3

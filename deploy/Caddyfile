@@ -1,0 +1,11 @@
+:{$PORT:8080} {
+    handle_path /api/backend/* {
+        reverse_proxy 127.0.0.1:8000
+    }
+    handle /health {
+        reverse_proxy 127.0.0.1:8000
+    }
+    handle {
+        reverse_proxy 127.0.0.1:3000
+    }
+}

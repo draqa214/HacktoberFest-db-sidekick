@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+.markdown-message { line-height: 1.75; }
+.markdown-message > :first-child { margin-top: 0; }
+.markdown-message > :last-child { margin-bottom: 0; }
+.markdown-message h1, .markdown-message h2, .markdown-message h3,
+.markdown-message h4, .markdown-message h5, .markdown-message h6 {
+  margin: 1.4em 0 0.6em; font-weight: 700; line-height: 1.35; color: #f3f4f6;
+}
+.markdown-message h1 { font-size: 1.5em; }
+.markdown-message h2 { font-size: 1.3em; }
+.markdown-message h3 { font-size: 1.15em; }
+.markdown-message p { margin: 0.75em 0; }
+.markdown-message ul, .markdown-message ol { margin: 0.75em 0; padding-left: 1.5em; }
+.markdown-message ul { list-style: disc; }
+.markdown-message ol { list-style: decimal; }
+.markdown-message li { margin: 0.25em 0; }
+.markdown-message li > p { margin: 0.25em 0; }
+.markdown-message strong { font-weight: 700; color: #f9fafb; }
+.markdown-message a { color: #93c5fd; text-decoration: underline; }
+.markdown-message blockquote { margin: 1em 0; padding-left: 1em; border-left: 3px solid #64748b; color: #cbd5e1; }
+.markdown-message hr { margin: 1.5em 0; border-color: #4b5563; }
+.markdown-message code { font-size: 0.9em; background: #111827; border-radius: 0.3em; padding: 0.15em 0.35em; }
+.markdown-message pre { max-width: 100%; overflow-x: auto; background: #111827; border: 1px solid #374151; border-radius: 0.75em; padding: 1em; margin: 1em 0; }
+.markdown-message pre code { background: transparent; padding: 0; border-radius: 0; white-space: pre; }
+.markdown-message table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+.markdown-message th, .markdown-message td { border: 1px solid #4b5563; padding: 0.5em 0.75em; text-align: left; }
+.markdown-message th { background: #111827; font-weight: 600; }
+.markdown-message .katex-display { overflow-x: auto; overflow-y: hidden; }
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar          { width: 8px; height: 8px; }
+::-webkit-scrollbar-track    { background: #f1f5f9; }
+::-webkit-scrollbar-thumb    { background: #cbd5e1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Dot-grid background (login / onboarding pages) ───────────────────────────── */
+.bg-dot-grid {
+  background-color: #f8fafc;
+  background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Smooth focus ring ─────────────────────────────────────────────────────────── */
+.input-base {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: #1e293b;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.input-base:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.input-base:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* ── Smooth animations ─────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
